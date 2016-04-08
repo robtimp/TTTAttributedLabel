@@ -214,6 +214,21 @@ static inline void TTTSimulateLongPressOnLabelAtPointWithDuration(TTTAttributedL
     expect(((NSTextCheckingResult *)label.links[0]).URL).will.equal(testURL);
 }
 
+- (void)testEmailEnabledByDefault {
+    label.enabledTextCheckingTypes = NSTextCheckingTypeLink;
+    label.text = @"test@example.com";
+    
+    expect([label.links count]).will.equal(1);
+    expect(((NSTextCheckingResult *)label.links[0]).URL.absoluteString).will.equal(@"mailto:test@example.com");
+}
+
+- (void)testEmailDisabled {
+    label.enabledTextCheckingTypes = NSTextCheckingTypeLink;
+    label.text = @"test@example.com";
+    
+    expect([label.links count]).will.equal(0);
+}
+
 - (void)testAttributedStringLinkDetection {
     label.enabledTextCheckingTypes = NSTextCheckingTypeLink;
     label.text = [[NSAttributedString alloc] initWithString:[testURL absoluteString]];
