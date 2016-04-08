@@ -214,21 +214,6 @@ static inline void TTTSimulateLongPressOnLabelAtPointWithDuration(TTTAttributedL
     expect(((NSTextCheckingResult *)label.links[0]).URL).will.equal(testURL);
 }
 
-- (void)testEmailEnabledByDefault {
-    label.enabledTextCheckingTypes = NSTextCheckingTypeLink;
-    label.text = @"test@example.com";
-    
-    expect([label.links count]).will.equal(1);
-    expect(((NSTextCheckingResult *)label.links[0]).URL.absoluteString).will.equal(@"mailto:test@example.com");
-}
-
-- (void)testEmailDisabled {
-    label.enabledTextCheckingTypes = NSTextCheckingTypeLink;
-    label.text = @"test@example.com";
-    
-    expect([label.links count]).will.equal(0);
-}
-
 - (void)testAttributedStringLinkDetection {
     label.enabledTextCheckingTypes = NSTextCheckingTypeLink;
     label.text = [[NSAttributedString alloc] initWithString:[testURL absoluteString]];
@@ -248,6 +233,22 @@ static inline void TTTSimulateLongPressOnLabelAtPointWithDuration(TTTAttributedL
     XCTAssertEqual(result.resultType, NSTextCheckingTypeLink, @"Should be a link checking result");
     XCTAssertTrue(result.range.location == 0 && result.range.length == 1, @"Link range should match");
     XCTAssertEqualObjects(result.URL, testURL, @"Should set and retrieve test URL");
+}
+
+- (void)testEmailEnabledByDefault {
+    label.enabledTextCheckingTypes = NSTextCheckingTypeLink;
+    label.text = @"test@example.com";
+    
+    expect([label.links count]).will.equal(1);
+    expect(((NSTextCheckingResult *)label.links[0]).URL.absoluteString).will.equal(@"mailto:test@example.com");
+}
+
+- (void)testEmailDisabled {
+    label.enabledTextCheckingTypes = NSTextCheckingTypeLink;
+    label.emailLinksEnabled = NO;
+    label.text = @"test@example.com";
+    
+    expect([label.links count]).will.equal(0);
 }
 
 - (void)testInheritsAttributesFromLabel:(TTTAttributedLabel *)labelInstance text:(id)text {
